@@ -2,8 +2,8 @@ import flwr as fl
 
 import torch
 
-from dataset import DemandDataset
-from model import DemandMLP
+from project_1.src.data.dataset import DemandDataset
+from project_1.src.models.model import DemandMLP
 
 from torch.utils.data import DataLoader
 

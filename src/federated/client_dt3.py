@@ -1,6 +1,6 @@
 # client_dt1.py
 
-from client import FlowerClient
+from project_1.src.federated.client import FlowerClient
 import flwr as fl
 
 fl.client.start_numpy_client(
