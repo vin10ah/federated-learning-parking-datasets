@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Env
+venv/
+.venv/
+
+# Dataset
+data/
+dataset/
+datasets/
+
+*.csv
+*.npz
+*.npy
+
+# Model
+*.pt
+*.pth
+*.ckpt
+
+# Logs
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
