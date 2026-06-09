@@ -147,3 +147,137 @@ def compare_slot_usage(datasets):
         })
 
     return pd.DataFrame(rows)
+
+
+import matplotlib.pyplot as plt
+
+ 
+# 슬롯 위치 및 사용량 표시
+
+def plot_slot_layout_usage(timeline):
+
+    slot_pos = (
+
+        timeline
+        .dropna(subset=["park_slot_id"])
+
+        .groupby("park_slot_id")
+
+        .agg(
+            lat=("lat", "mean"),
+            lon=("lon", "mean"),
+            usage=("car_id", "count")
+        )
+
+        .reset_index()
+    )
+
+    plt.figure(figsize=(10, 8))
+
+    plt.scatter(
+
+        slot_pos["lon"],
+        slot_pos["lat"],
+
+        s=slot_pos["usage"] / 100,
+
+        alpha=0.7
+    )
+
+    for _, row in slot_pos.iterrows():
+
+        plt.text(
+
+            row["lon"],
+            row["lat"],
+
+            row["park_slot_id"],
+
+            fontsize=8
+        )
+
+    plt.title(
+        "Parking Slot Layout + Usage"
+    )
+
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+
+    plt.grid(True)
+
+    plt.show()
+
+
+
+
+# 슬롯 위치 및 사용량 한번에 표시
+
+def plot_all_slot_layouts(datasets):
+
+    fig, axes = plt.subplots(
+        1,
+        len(datasets),
+        figsize=(18, 6)
+    )
+
+    if len(datasets) == 1:
+        axes = [axes]
+
+    for ax, (client_id, data) in zip(
+        axes,
+        datasets.items()
+    ):
+
+        timeline = data["timeline"]
+
+        slot_pos = (
+
+            timeline
+            .dropna(
+                subset=["park_slot_id"]
+            )
+
+            .groupby(
+                "park_slot_id"
+            )
+
+            .agg(
+                lat=("lat", "mean"),
+                lon=("lon", "mean"),
+                usage=("car_id", "count")
+            )
+
+            .reset_index()
+        )
+
+        ax.scatter(
+            slot_pos["lon"],
+            slot_pos["lat"],
+            s=slot_pos["usage"] / 100,
+            alpha=0.7
+        )
+
+        for _, row in slot_pos.iterrows():
+
+            ax.text(
+                row["lon"],
+                row["lat"],
+                row["park_slot_id"],
+                fontsize=8
+            )
+
+        ax.set_title(client_id)
+
+        ax.set_xlabel("Longitude")
+        ax.set_ylabel("Latitude")
+
+        ax.grid(True)
+
+    plt.suptitle(
+        "Parking Slot Layout Comparison",
+        fontsize=14
+    )
+
+    plt.tight_layout()
+
+    plt.show()
